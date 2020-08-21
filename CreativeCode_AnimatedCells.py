@@ -243,6 +243,33 @@ def draw_lines_grid(cell, display, position, size):
     pygame.draw.line(display.surface, (0, 255, 0, 255), (int(px-radius), int(py+radius)),
                      (int(px+radius), int(py+radius)), 1)
 
+def draw_poly_random(cell, display, position, size):
+    px, py = position
+    span = (cell.age / cell.rate)%int(size)
+    pos = float(span)/float(int(size))
+
+    radius = size*math.sin(pos*math.pi)
+
+    radius = int(radius)
+    pygame.draw.polygon(display.surface, cell.colour,
+                        [(random.randint(px - radius, px + radius), random.randint(py - radius, py + radius)),
+                         (random.randint(px - radius, px + radius), random.randint(py - radius, py + radius)),
+                         (random.randint(px - radius, px + radius), random.randint(py - radius, py + radius)), ], 0)
+
+def draw_poly_random_fixed(cell, display, position, size):
+    px, py = position
+    span = (cell.age / cell.rate)%int(size)
+    pos = float(span)/float(int(size))
+
+    radius = size
+
+    radius = int(radius)
+    pygame.draw.polygon(display.surface, cell.colour,
+                        [(random.randint(px - radius, px + radius), random.randint(py - radius, py + radius)),
+                         (random.randint(px - radius, px + radius), random.randint(py - radius, py + radius)),
+                         (random.randint(px - radius, px + radius), random.randint(py - radius, py + radius)), ], 0)
+
+
 def draw_lines_grid_upper(cell, display, position, size):
     px, py = position
     span = (cell.age / cell.rate)%int(size)
@@ -278,7 +305,7 @@ def game_loop():
 
 
     # Cycling bubbles
-    F_BUBBLE_CYCLE = True
+    F_BUBBLE_CYCLE = False
     if F_BUBBLE_CYCLE:
         for x in xrange(0, int(width/cellSize)):
             for y in xrange(0, int(height/cellSize)):
@@ -288,7 +315,7 @@ def game_loop():
                 cell.colour = (random.randint(128, 255), random.randint(128, 255), random.randint(128, 255), 255)
                 elements.append(cell)
 
-    F_GRID = True
+    F_GRID = False
     if F_GRID:
         for x in xrange(0, int(width/cellSize)):
             for y in xrange(0, int(height/cellSize)):
@@ -298,7 +325,7 @@ def game_loop():
                     cell.rate = random.randint(10,11)
                     elements.append(cell)
 
-    F_GRID_UPPER = True
+    F_GRID_UPPER = False
     if F_GRID_UPPER:
         for x in xrange(0, int(width/cellSize)):
             for y in xrange(0, int(height/cellSize)):
@@ -315,6 +342,28 @@ def game_loop():
             for y in xrange(0, int(height/cellSize)):
                 if random.random() > 0.3:
                     cell = Cell(draw_lines_intersection, ( (cellSize>>1)+x*cellSize ,(cellSize>>1)+y*cellSize), cellSize>>1)
+                    cell.age = random.randint(0,1000)
+                    cell.rate = random.randint(10,11)
+                    cell.colour = (random.randint(128, 255), random.randint(128, 255), random.randint(128, 255), 255)
+                    elements.append(cell)
+
+    F_POLY_RANDOM = False
+    if F_POLY_RANDOM:
+        for x in xrange(0, int(width/cellSize)):
+            for y in xrange(0, int(height/cellSize)):
+                if random.random() > 0.3:
+                    cell = Cell(draw_poly_random, ( (cellSize>>1)+x*cellSize ,(cellSize>>1)+y*cellSize), cellSize>>1)
+                    cell.age = random.randint(0,1000)
+                    cell.rate = random.randint(10,11)
+                    cell.colour = (random.randint(128, 255), random.randint(128, 255), random.randint(128, 255), 255)
+                    elements.append(cell)
+
+    F_POLY_RANDOM_FIXED = True
+    if F_POLY_RANDOM_FIXED:
+        for x in xrange(0, int(width/cellSize)):
+            for y in xrange(0, int(height/cellSize)):
+                if random.random() > 0.3:
+                    cell = Cell(draw_poly_random_fixed, ( (cellSize>>1)+x*cellSize ,(cellSize>>1)+y*cellSize), cellSize>>1)
                     cell.age = random.randint(0,1000)
                     cell.rate = random.randint(10,11)
                     cell.colour = (random.randint(128, 255), random.randint(128, 255), random.randint(128, 255), 255)
